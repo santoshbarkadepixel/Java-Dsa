@@ -1,0 +1,159 @@
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Iterator;
+     public class Hotel{
+        static Scanner in = new Scanner(System.in);
+             static ArrayList<Booking>bookings=new ArrayList<>();
+
+             public static void main(String[] args) {
+                int choice;
+                 while(true){
+                    displaymenu();
+                    choice = in.nextInt();
+                     switch(choice){
+                        case 1 -> addbooking();
+                        case 2 -> showallbooking();
+                        case 3 -> searchbookingbyname();
+                        case 4 -> deletebookingbyroom();
+                        case 5 ->{ System.out.println("thank you for visiting us");
+                                     return;
+                    }
+                         default ->System.out.println("invalid choice");
+                  }
+               }    
+             }
+              static void displaymenu(){
+                     System.out.println("*****  HOTEL BOOKING  ***** ");
+                        System.out.println("1. Add booking ");
+                        System.out.println("2.show all bookings");
+                        System.out.println("3. search booking byn name");
+                        System.out.println("4. delete booking by room no");
+                        System.out.println("5. exit");
+                        System.out.println("enter the choice");
+                      }    
+              static void addbooking(){
+                        in.nextLine();
+                        System.out.print("enter the cutomer name :");
+                        String name = in.nextLine();
+                        System.out.print("enter the room no:");
+                        int room = in.nextInt();
+                        if (isRoomBooked(room)) {
+                            System.out.print("selected room is not empty");
+                            return;
+                        }
+                        System.out.print("enterr the number of days :");
+                        int days = in.nextInt();
+                        System.out.print("enter the price per day:");
+                        Double price = in.nextDouble();
+                        bookings.add(new Booking(name,room,days,price));
+                        System.out.println("Booking done successfully");
+                        System.out.println();
+                     } 
+                     
+                     static void deletebookingbyroom(){
+                      System.out.println("enter the room number for booking to be deleted :");
+                      int room = in.nextInt();
+                      in.nextLine();
+                       boolean deleted = false;
+                       Iterator<Booking>it=bookings.iterator();
+                       while(it.hasNext()){
+                        Booking b=it.next();
+                        if (b.roomno==room) {
+                           it.remove();
+                           System.out.println("booking deleted successfully");
+                           deleted = true;
+                           break;
+                        }
+                       }
+                       if (!deleted) {System.out.println("no booking found for entered room no");
+                       }
+                        System.out.println();
+                     }
+                     
+                      static void searchbookingbyname(){
+                        boolean found = false;
+                         in.nextLine();
+                       
+                         System.out.println("enter the name to search");
+                          String name = in.nextLine();
+                         
+
+                          for (Booking b: bookings) {
+                           if (b.CustomerName.equalsIgnoreCase(name)) {
+
+                            b.display();
+                            found = true;  
+                           }
+                           
+                          }
+                          if (!found) {
+                           System.out.println("no booking found for "+name);
+                           
+                          }
+                         
+                             System.out.println();
+                      }
+                      static void showallbooking(){
+                        boolean found = false;
+                        
+                         
+                        if (bookings.isEmpty()) 
+                        { 
+                           System.out.println("no booking found");
+                           return;
+                        }
+                        for (Booking b : bookings) {
+                           
+                              b.display();
+                              found = true;
+                     
+                        }
+                           if(!found){
+                              System.out.println("no booking found for");
+                           }
+                        System.out.println();
+                        }
+                        static boolean isRoomBooked(int room){
+                           for ( Booking b : bookings) {
+                              if(b.roomno==room){
+                              return true;
+
+                              }   
+                           }return false;
+                        }
+                         static boolean equalsIgnore(String name){
+                           for (Booking b : bookings) {
+                              
+                           
+                           if (b.CustomerName==name) {
+                              return true;
+                           }
+                         }return false;
+                        }
+                           
+                     }
+
+    class Booking{
+    String CustomerName;
+      int roomno;
+    int days; 
+    double priceperday ;
+     
+     Booking(String name, int room, int days , double price){
+        this.CustomerName = name;
+        this.roomno=room;
+        this.days=days;
+        this.priceperday = price;
+    }
+     double calculatebill(){
+        return days*priceperday;
+     }
+
+     void display(){
+        System.out.println("  customer name:"+CustomerName);
+        System.out.println("  room number :"+roomno);
+        System.out.println("  number of days:"+days);
+       System.out.println("toatal bill:"+calculatebill());
+        System.out.println("________________________________________________________");
+     }
+   }
